@@ -21,5 +21,33 @@
         });
     }
 
+    chrome.runtime.onMessage.addListener((obj, sender, sendResponse) => {
+        if (obj) {
+            if (obj.method == 'getMethod') {
+                console.log("turn-page get content");
+                // getContent(sendResponse);
+            } else if (obj.method == 'othermethod') {
+        
+            }
+        }
+        return true; // remove this line to make the call sync!
+    });
+
+    // wrapper method 
+    function getMethod() {
+        callEventPageMethod('getMethod', 'some',  (value) => {
+            console.log("turn-page get", value);
+            // document.getElementById("test"+value).checked = true;
+        });
+    }
+    
+    //generic method
+    function callEventPageMethod(method, data, callback) {
+        chrome.runtime.sendMessage({ method: method, data: data }, (response) => {
+            if(typeof callback === "function") callback(response);
+        });
+    }
+
+    getMethod();
     checkImgLoad();
 })();
